@@ -5,8 +5,6 @@
   <script>
 
     function init() {
-      console.log('hash', location.hash);
-
       var hash = {};
       location.hash.replace(/^#\/?/, '').split('&').forEach(function(kv) {
         var spl = kv.indexOf('=');
@@ -15,12 +13,10 @@
         }
       });
 
-      console.log('initial hash', hash);
-
       if (hash.access_token) {
         window.opener.postMessage(JSON.stringify({
-          playlistManagerCredentials: {
-            type:'access_token',
+          guessify: {
+            type: 'access_token',
             access_token: hash.access_token,
             expires_in: parseInt(hash.expires_in) || 0
           }
