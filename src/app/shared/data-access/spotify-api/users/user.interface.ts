@@ -1,3 +1,10 @@
+import {
+  ExternalUrlsInterface,
+  FollowersInformationInterface,
+  ImageResourceInterface,
+  ObjectTypeEnum
+} from '../spotify-api.types';
+
 export interface UserInterface {
   country: string;
   display_name: string;
@@ -6,17 +13,12 @@ export interface UserInterface {
     filter_enabled: boolean;
     filter_locked: boolean;
   },
-  external_urls: {
-    spotify: string;
-  },
-  followers: {
-    href: string;
-    total: 0
-  },
+  external_urls: ExternalUrlsInterface;
+  followers: FollowersInformationInterface,
   href: string;
   id: string;
-  images: any[],
+  images: ImageResourceInterface[],
   product: string;
-  type: string;
+  type: ObjectTypeEnum.User;
   uri: string;
 }

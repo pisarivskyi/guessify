@@ -27,6 +27,7 @@ export enum ObjectTypeEnum {
   Track = 'track',
   Show = 'show',
   Episode = 'episode',
+  User = 'user'
 }
 
 export interface FollowersInformationInterface {
