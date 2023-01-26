@@ -1,5 +1,28 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "schematics": {
+    "@schematics/angular": {
+      "component": {
+        "changeDetection": "OnPush",
+        "skipTests": true
+      },
+      "class": {
+        "skipTests": true
+      },
+      "directive": {
+        "skipTests": true
+      },
+      "pipe": {
+        "skipTests": true
+      },
+      "guard": {
+        "skipTests": true
+      },
+      "service": {
+        "skipTests": true
+      }
+    }
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -71,7 +94,10 @@
               "browserTarget": "guessify:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 5200
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

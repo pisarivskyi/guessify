@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'flex flex-column h-full flex-grow-1'
+  }
 })
-export class AppComponent {
-  title = 'guessify';
-}
+export class AppComponent {}

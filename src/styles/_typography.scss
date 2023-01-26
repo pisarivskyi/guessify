@@ -1,0 +1,8 @@
+html {
+  font-size: var(--text-size);
+
+  &,
+  .p-component {
+    font-family: var(--font-family);
+  }
+}
