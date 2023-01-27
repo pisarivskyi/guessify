@@ -12,6 +12,7 @@ import { TracksService } from './tracks';
 import { UrlBuilderService } from './url-builder';
 import { UsersService } from './users';
 import { SearchService } from './search';
+import { CategoriesService } from './categories';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ export class SpotifyApiModule {
         UrlBuilderService,
         UsersService,
         SearchService,
+        CategoriesService,
         { provide: AUTH_CONFIG, useValue: config },
         { provide: HOST_CONFIG, useValue: hostConfig },
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

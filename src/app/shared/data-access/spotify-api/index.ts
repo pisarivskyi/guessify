@@ -9,3 +9,4 @@ export * from './tracks/index';
 export * from './url-builder/index';
 export * from './users/index';
 export * from './search/index';
+export * from './categories/index';
