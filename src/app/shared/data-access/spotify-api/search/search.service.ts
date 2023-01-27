@@ -13,13 +13,13 @@ export class SearchService {
 
   constructor(private http: HttpClient, private urlBuilder: UrlBuilderService) { }
 
-  searchForItem(query: string, types?: ObjectTypeEnum[]): Observable<SearchResultInterface> {
+  searchForItem(query: string, types: ObjectTypeEnum[]): Observable<SearchResultInterface> {
     return this.http.get<SearchResultInterface>(
       this.urlBuilder.build(['search']),
       {
         params: {
           q: query,
-          type: ObjectTypeEnum.Artist
+          type: types.join(',')
         }
       }
     );
