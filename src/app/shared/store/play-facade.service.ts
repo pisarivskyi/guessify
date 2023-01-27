@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
-import { shuffle } from 'lodash-es';
+import { random, shuffle } from 'lodash-es';
 
 import { PlaylistInterface, PlaylistItemInterface } from '@spotify-api';
 import { PlaylistsStoreService } from '@shared/store/playlists-store.service';
@@ -26,24 +26,26 @@ export interface GameLevelInterface {
 }
 
 export interface GameStateInterface {
+  stage: GameStageEnum,
   score: number;
   currentLevelIndex: number;
   currentLevel: GameLevelInterface | null;
   levels: GameLevelInterface[];
 }
 
+const initialState: GameStateInterface = {
+  stage: GameStageEnum.Loading,
+  score: 0,
+  currentLevelIndex: 0,
+  currentLevel: null,
+  levels: []
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class PlayFacadeService {
-  gameStage$ = new BehaviorSubject<GameStageEnum>(GameStageEnum.Loading);
-
-  gameState$ = new BehaviorSubject<GameStateInterface>({
-    score: 0,
-    currentLevelIndex: 0,
-    currentLevel: null,
-    levels: []
-  });
+  gameState$ = new BehaviorSubject<GameStateInterface>(initialState);
 
   playlist$ = new BehaviorSubject<PlaylistInterface | null>(null);
 
@@ -68,8 +70,15 @@ export class PlayFacadeService {
 
         this.preloaderService.setIsLoading(false);
 
-        this.gameStage$.next(GameStageEnum.Ready);
+        this.gameState$.next({
+          ...this.gameState$.value,
+          stage: GameStageEnum.Ready
+        });
       });
+  }
+
+  resetGameState(): void {
+    this.gameState$.next(initialState);
   }
 
   play(): void {
@@ -78,16 +87,12 @@ export class PlayFacadeService {
     const levels = this.generateLevels(randomizedTracks);
 
     this.gameState$.next({
+      stage: GameStageEnum.Playing,
       score: 0,
       currentLevel: levels[0],
       currentLevelIndex: 0,
       levels
     });
-
-    console.log(randomizedTracks.length);
-    console.log(levels);
-
-    this.gameStage$.next(GameStageEnum.Playing);
   }
 
   checkGuess(guess: GuessItemInterface): boolean {
@@ -106,18 +111,36 @@ export class PlayFacadeService {
   next(): void {
     const nextLevelIndex = this.gameState$.value.currentLevelIndex + 1;
 
-    this.gameState$.next({
-      ...this.gameState$.value,
-      currentLevel: this.gameState$.value.levels[nextLevelIndex],
-      currentLevelIndex: nextLevelIndex,
-    });
+    if (nextLevelIndex > this.gameState$.value.levels.length - 1) {
+      this.gameState$.next({
+        ...this.gameState$.value,
+        stage: GameStageEnum.Finished
+      });
+    } else {
+      this.gameState$.next({
+        ...this.gameState$.value,
+        currentLevel: this.gameState$.value.levels[nextLevelIndex],
+        currentLevelIndex: nextLevelIndex,
+      });
+    }
   }
 
   private generateLevels(tracks: PlaylistItemInterface[]): GameLevelInterface[] {
     const levels: GameLevelInterface[] = [];
 
-    for (let i = 0; i < tracks.length; i += 4) {
-      levels.push(this.generateLevel(tracks[i], tracks[i + 1], tracks[i + 2], tracks[i + 3]))
+    for (let i = 0; i < tracks.length; i += 1) {
+      const trackBIndex = this.getRandomTrackIndex([i], tracks.length - 1);
+      const trackCIndex = this.getRandomTrackIndex([i, trackBIndex], tracks.length - 1);
+      const trackDIndex = this.getRandomTrackIndex([i, trackBIndex, trackCIndex], tracks.length - 1);
+
+      levels.push(
+        this.generateLevel(
+          tracks[i],
+          tracks[trackBIndex],
+          tracks[trackCIndex],
+          tracks[trackDIndex]
+        )
+      );
     }
 
     return levels;
@@ -153,5 +176,15 @@ export class PlayFacadeService {
       correct,
       guesses: shuffle(guesses)
     }
+  }
+
+  private getRandomTrackIndex(excludeIndexes: number[], lastIndex: number): number {
+    let index: number;
+
+    do {
+      index = random(0, lastIndex);
+    } while(excludeIndexes.includes(index))
+
+    return index;
   }
 }

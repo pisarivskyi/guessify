@@ -6,6 +6,11 @@ import { GuesserShellComponent } from './guesser-shell.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'playlists',
+  },
+  {
+    path: '',
     component: GuesserShellComponent,
     children: [
       {

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, take } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
@@ -15,8 +15,10 @@ import { GameStageEnum, GuessItemInterface, PlayFacadeService } from '@shared/st
     class: 'flex flex-column flex-grow-1'
   }
 })
-export class PlayPageComponent implements OnInit {
-  gameStage$ = this.playFacadeService.gameStage$;
+export class PlayPageComponent implements OnInit, OnDestroy {
+  gameStage$ = this.playFacadeService.gameState$.pipe(
+    map((state) => state.stage)
+  );
 
   gameState$ = this.playFacadeService.gameState$;
 
@@ -30,6 +32,7 @@ export class PlayPageComponent implements OnInit {
 
   constructor(
     private playFacadeService: PlayFacadeService,
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService
   ) {}
@@ -40,8 +43,18 @@ export class PlayPageComponent implements OnInit {
       .subscribe(({ playlistId }) => this.playFacadeService.initLevel(playlistId));
   }
 
+  ngOnDestroy(): void {
+    this.playFacadeService.resetGameState();
+  }
+
   onStart(): void {
     this.playFacadeService.play();
+  }
+
+  onGoBack(): void {
+    this.router.navigate(['../../', 'playlists'], {
+      relativeTo: this.activatedRoute
+    });
   }
 
   onGuessSelected(guess: GuessItemInterface): void {

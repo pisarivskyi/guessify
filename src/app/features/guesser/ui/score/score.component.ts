@@ -8,7 +8,7 @@ import { GameStateInterface } from '@shared/store/play-facade.service';
   styleUrls: ['./score.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-grow-1 flex-column'
+    class: 'flex flex-column'
   }
 })
 export class ScoreComponent {
