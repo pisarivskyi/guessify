@@ -9,6 +9,7 @@ import { AuthStoreService } from '@shared/store/auth-store.service';
 import { environment } from '@environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GlobalPreloaderModule } from '@shared/components/global-preloader/global-preloader.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AppComponent } from './app.component';
     SpotifyApiModule.forRoot({
       clientId: environment.clientId
     }),
-    AppRoutingModule
+    AppRoutingModule,
+    GlobalPreloaderModule
   ],
   providers: [
     {
