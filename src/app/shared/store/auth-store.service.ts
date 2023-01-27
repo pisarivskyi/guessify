@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, fromEvent, map, Observable, of, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, fromEvent, map, Observable, of, take, tap, throwError } from 'rxjs';
 import { isString } from 'lodash-es';
 
-import { AuthService, ResponseTypeEnum, ScopeEnum } from '@spotify-api';
+import { AuthService, ResponseTypeEnum, ScopeEnum, UsersService } from '@spotify-api';
 import { environment } from '@environment';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class AuthStoreService {
 
   private readonly tokenLocalHostKey = 'guessifyToken';
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private usersService: UsersService) { }
 
   initialize(): void {
     const token = this.loadToken();
@@ -21,7 +21,19 @@ export class AuthStoreService {
     if (token) {
       this.authService.setAccessToken(token);
 
-      this.isAuthorized$.next(true);
+      this.usersService.getMe()
+        .pipe(
+          catchError((error) => {
+            this.logOut();
+
+            this.isAuthorized$.next(false);
+
+            return throwError(error)
+          })
+        )
+        .subscribe(() => {
+          this.isAuthorized$.next(true);
+        });
     } else {
       this.isAuthorized$.next(false);
     }
@@ -76,6 +88,12 @@ export class AuthStoreService {
       'menubar=no,location=no,resizable=no,scrollbars=no,status=no,' +
       `width=${windowWidth},height=${windowHeight},top=${windowTop},left=${windowLeft}`
     );
+  }
+
+  logOut(): void {
+    this.authService.setAccessToken('');
+
+    localStorage.removeItem(this.tokenLocalHostKey);
   }
 
   private loadToken(): string | null {
