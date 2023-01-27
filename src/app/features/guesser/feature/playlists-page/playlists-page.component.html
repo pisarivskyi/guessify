@@ -1,0 +1,10 @@
+<h1 class="mb-5">Choose a playlist</h1>
+
+<div class="grid">
+  <app-playlist-card
+    class="xl:col-2 lg:col-3 md:col-6 sm:col-1"
+    *ngFor="let playlist of playlists$ | async"
+    [playlist]="playlist"
+    (playlistClick)="onPlaylistSelect($event)"
+  ></app-playlist-card>
+</div>

@@ -13,8 +13,8 @@ const routes: Routes = [
   },
   {
     path: 'guesser',
-    loadChildren: () => import('@guesser/feature/guesser-page.module')
-      .then((m) => m.GuesserPageModule),
+    loadChildren: () => import('@guesser/feature/guesser-shell/guesser-shell.module')
+      .then((m) => m.GuesserShellModule),
     canActivate: [
       AuthorizedOnlyGuard
     ]

@@ -1,0 +1,11 @@
+<div
+  *ngIf="playlist"
+  class="p-card border-none p-3 hover:bg-black-alpha-10 cursor-pointer transition-colors transition-duration-150"
+  (click)="playlistClick.emit(playlist.id)"
+>
+  <div class="">
+    <img class="w-full h-auto" [ngSrc]="playlist.images[0].url" [width]="400" [height]="400">
+  </div>
+
+  <h4 class="">{{ playlist.name }}</h4>
+</div>

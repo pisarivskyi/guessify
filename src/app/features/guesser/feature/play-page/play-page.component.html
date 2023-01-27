@@ -1,0 +1,23 @@
+<div
+  *ngIf="(gameStage$ | async) === GameStageEnum.Ready"
+  class="flex-grow-1 text-center flex flex-column align-items-center justify-content-center"
+>
+  <ng-container *ngIf="playlist$ | async as playlist">
+    <h1 class="mb-6">Hit Start button when you are ready to play</h1>
+
+    <img class="mb-6" *ngIf="playlist.images[0]?.url" [ngSrc]="playlist.images[0].url" [width]="250" [height]="250">
+
+    <button class="p-button-lg" pButton (click)="onStart()">Start</button>
+  </ng-container>
+</div>
+
+<div *ngIf="(gameStage$ | async) === GameStageEnum.Playing" class="flex-grow-1 flex flex-column">
+  <app-score class="flex-grow-1" [gameState]="gameState$ | async"></app-score>
+
+  <app-game-level
+    [gameLevel]="gameLevel$ | async"
+    (guessSelected)="onGuessSelected($event)"
+  ></app-game-level>
+</div>
+
+<p-toast></p-toast>
