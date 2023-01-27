@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-root',
   template: `
     <router-outlet></router-outlet>
+    <app-global-preloader></app-global-preloader>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
