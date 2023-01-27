@@ -8,13 +8,13 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () => import('@home/feature/home-page-routing.module')
-      .then((m) => m.HomePageRoutingModule)
+    loadChildren: () => import('@home/feature/home-page.module')
+      .then((m) => m.HomePageModule)
   },
   {
     path: 'guesser',
-    loadChildren: () => import('@guesser/feature/guesser-page-routing.module')
-      .then((m) => m.GuesserPageRoutingModule),
+    loadChildren: () => import('@guesser/feature/guesser-page.module')
+      .then((m) => m.GuesserPageModule),
     canActivate: [
       AuthorizedOnlyGuard
     ]
