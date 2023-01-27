@@ -1,0 +1,7 @@
+<p *ngFor="let playlistItem of tracks">
+  <span *ngFor="let artist of playlistItem.track.artists">{{ artist.name }}, </span>
+  -
+  <span>{{ playlistItem.track.name }}</span>
+
+  <button (click)="onPlayPreview(playlistItem.track.preview_url!)">play preview</button>
+</p>

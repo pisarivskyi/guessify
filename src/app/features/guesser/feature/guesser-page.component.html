@@ -1,0 +1,24 @@
+<div class="mx-auto max-w-30rem">
+  <h2>Playlists</h2>
+
+  <p-dropdown
+    styleClass="w-full"
+    [options]="(playlists$ | async) || []"
+    [(ngModel)]="selectedPlaylist"
+    (onChange)="onPlaylistSelect($event)"
+    optionLabel="name"
+    [emptyMessage]="'werwer'"
+  ></p-dropdown>
+
+  <button class="mt-3" pButton (click)="onPlayRandom()">Play random</button>
+
+  <p>Track: #{{ alreadyPlayedTracksIds.length }} of {{ (tracks$ | async)?.length }}</p>
+
+  <h2>You've guessed correectly {{ guessedCorrectly }} tracks</h2>
+
+  <button pButton (click)="onSkip()">Skip</button>
+
+  <app-search-for-guess (selectTrack)="onSelectTrack($event)"></app-search-for-guess>
+</div>
+
+<p-toast position="top-center"></p-toast>

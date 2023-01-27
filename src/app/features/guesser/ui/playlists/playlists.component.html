@@ -1,0 +1,4 @@
+<p *ngFor="let playlist of playlists">
+  {{ playlist.name }}
+  <button (click)="onSelectPlaylist(playlist.id)">load</button>
+</p>

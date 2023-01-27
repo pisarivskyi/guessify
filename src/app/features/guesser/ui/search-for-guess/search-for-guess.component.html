@@ -1,0 +1,25 @@
+<h5>Search for guess</h5>
+<div class="p-input-icon-left block">
+    <i class="pi pi-search"></i>
+
+    <input class="w-full" [formControl]="searchInput" type="text" pInputText placeholder="Search" />
+</div>
+
+<button
+  class="text-left p-button-text hover:surface-100 p-button-icon-only py-2 w-full"
+  pButton
+  *ngFor="let track of searchTracks$ | async"
+  (click)="onSelectTrack(track)"
+>
+  <span *ngFor="let artist of track.artists">{{ artist.name }}, </span>
+  -
+  <span>{{ track.name }}</span>
+</button>
+
+<!--(focus)="op.toggle($event)"-->
+
+<!--<p-overlayPanel #op [style]="{ width: '450px' }">-->
+<!--  <ng-template pTemplate>-->
+
+<!--  </ng-template>-->
+<!--</p-overlayPanel>-->
