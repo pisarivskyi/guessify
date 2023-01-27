@@ -1,0 +1,14 @@
+<div *ngIf="gameLevel">
+  <div class="grid">
+    <div class="col-6" *ngFor="let guess of gameLevel.guesses">
+      <div
+        class="p-card border-none p-3 hover:bg-black-alpha-10 cursor-pointer transition-colors transition-duration-150 text-center"
+        (click)="guessSelected.emit(guess)"
+      >
+        <img [ngSrc]="guess.image" [width]="150" [height]="150">
+
+        <p>{{ guess.fullName }}</p>
+      </div>
+    </div>
+  </div>
+</div>
